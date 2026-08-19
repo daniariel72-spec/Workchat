@@ -1,56 +1,106 @@
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>WORKCHAT</title>
-  <link rel="stylesheet" href="style.css">                       
+
+  <link rel="stylesheet" href="style.css">
 </head>
-  
+
 <body>
 
-  <header>
+  <header class="header">
     <h1>WORKCHAT</h1>
     <p>Создавай. Общайся. Твори.</p>
   </header>
 
-  <main>
+  <main class="main">
 
-    <section>
+    <section class="welcome">
       <h2>Что ты хочешь делать?</h2>
 
-      <button>🎬 Монтаж</button>
-      <button>🎵 Музыка</button>
-      <button>💬 Чаты</button>
-      <button>👤 Профиль</button>
+      <div class="action-buttons">
+
+        <button class="action-button" data-action="edit">
+          🎬
+          <span>Монтаж</span>
+        </button>
+
+        <button class="action-button" data-action="music">
+          🎵
+          <span>Музыка</span>
+        </button>
+
+        <button class="action-button" data-action="chat">
+          💬
+          <span>Чаты</span>
+        </button>
+
+        <button class="action-button" data-action="profile">
+          👤
+          <span>Профиль</span>
+        </button>
+
+      </div>
     </section>
 
-    <section>
+    <section class="popular">
+
       <h2>Популярное</h2>
 
-      <div>
+      <div class="card">
         <h3>🎬 Лучшие эдиты</h3>
         <p>Смотри работы других пользователей.</p>
       </div>
 
-      <div>
+      <div class="card">
         <h3>🎵 Новая музыка</h3>
         <p>Слушай треки начинающих авторов.</p>
       </div>
 
-      <div>
+      <div class="card">
         <h3>💬 Активные чаты</h3>
         <p>Общайся с другими креаторами.</p>
       </div>
+
     </section>
 
   </main>
 
-    <footer>
-    <p>© 2026 WORKCHAT</p>
-  </footer>
+  <nav class="bottom-nav">
+
+    <button class="nav-button active" data-page="home">
+      🏠
+      <span>Главная</span>
+    </button>
+
+    <button class="nav-button" data-page="create">
+      ➕
+      <span>Создать</span>
+    </button>
+
+    <button class="nav-button" data-page="music">
+      🎵
+      <span>Музыка</span>
+    </button>
+
+    <button class="nav-button" data-page="chat">
+      💬
+      <span>Чаты</span>
+    </button>
+
+    <button class="nav-button" data-page="profile">
+      👤
+      <span>Профиль</span>
+    </button>
+
+  </nav>
 
   <script src="script.js"></script>
 
 </body>
+
 </html>
