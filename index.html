@@ -1,106 +1,1785 @@
 <!DOCTYPE html>
 <html lang="ru">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#08080c">
 
   <title>WORKCHAT</title>
 
-  <link rel="stylesheet" href="style.css">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html,
+    body {
+      min-height: 100%;
+    }
+
+    body {
+      font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+
+      background: #08080c;
+      color: #ffffff;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    /* APP */
+
+    #app {
+      min-height: 100vh;
+      padding-bottom: 82px;
+    }
+
+    .topbar {
+      height: 64px;
+      padding: 0 18px;
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      background: #0d0d13;
+      border-bottom: 1px solid #25252e;
+
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .logo {
+      font-size: 19px;
+      font-weight: 800;
+      letter-spacing: 3px;
+    }
+
+    .theme-button {
+      width: 42px;
+      height: 42px;
+
+      border: 1px solid #292933;
+      border-radius: 50%;
+
+      background: #191921;
+      color: white;
+    }
+
+    /* PAGES */
+
+    .page {
+      display: none;
+
+      width: 100%;
+      max-width: 900px;
+
+      margin: 0 auto;
+
+      padding: 28px 17px;
+    }
+
+    .page.active {
+      display: block;
+    }
+
+    /* HOME */
+
+    .hero {
+      padding: 40px 4px;
+    }
+
+    .label {
+      color: #8c85ff;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 2px;
+
+      margin-bottom: 14px;
+    }
+
+    .hero h1 {
+      font-size: clamp(45px, 13vw, 80px);
+      line-height: .93;
+      letter-spacing: -4px;
+
+      margin-bottom: 22px;
+    }
+
+    .hero p {
+      max-width: 600px;
+
+      color: #9494a2;
+      line-height: 1.6;
+
+      margin-bottom: 24px;
+    }
+
+    .primary {
+      border: 0;
+      border-radius: 13px;
+
+      padding: 14px 20px;
+
+      background: #6c63ff;
+      color: white;
+
+      font-weight: 700;
+    }
+
+    .title {
+      font-size: 19px;
+      font-weight: 700;
+
+      margin: 18px 0 14px;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns:
+        repeat(3, 1fr);
+
+      gap: 12px;
+    }
+
+    .card {
+      min-height: 155px;
+
+      padding: 18px;
+
+      border: 1px solid #25252e;
+      border-radius: 18px;
+
+      background: #13131b;
+      color: white;
+
+      text-align: left;
+
+      display: flex;
+      flex-direction: column;
+
+      gap: 8px;
+    }
+
+    .card-icon {
+      font-size: 30px;
+    }
+
+    .card small {
+      color: #888895;
+      line-height: 1.4;
+    }
+
+    /* HEADERS */
+
+    .page-title {
+      display: flex;
+      align-items: center;
+
+      gap: 13px;
+
+      margin-bottom: 25px;
+    }
+
+    .page-title-icon {
+      font-size: 34px;
+    }
+
+    .page-title h2 {
+      font-size: 27px;
+    }
+
+    .page-title p {
+      color: #858592;
+      margin-top: 4px;
+    }
+
+    /* MUSIC */
+
+    .upload {
+      display: inline-block;
+
+      padding: 13px 18px;
+
+      border-radius: 12px;
+
+      background: #6c63ff;
+      color: white;
+
+      font-weight: 700;
+
+      cursor: pointer;
+    }
+
+    .music-player {
+      margin-top: 18px;
+
+      padding: 17px;
+
+      border: 1px solid #25252e;
+      border-radius: 18px;
+
+      background: #13131b;
+    }
+
+    .music-info {
+      display: flex;
+      align-items: center;
+
+      gap: 12px;
+
+      margin-bottom: 14px;
+    }
+
+    .music-cover {
+      width: 52px;
+      height: 52px;
+
+      display: grid;
+      place-items: center;
+
+      border-radius: 13px;
+
+      background: #292641;
+
+      font-size: 24px;
+    }
+
+    .music-name {
+      display: flex;
+      flex-direction: column;
+
+      gap: 4px;
+    }
+
+    .music-name span {
+      color: #858592;
+      font-size: 13px;
+    }
+
+    audio {
+      width: 100%;
+    }
+
+    .tracks {
+      display: flex;
+      flex-direction: column;
+
+      gap: 9px;
+    }
+
+    .track {
+      padding: 13px;
+
+      border: 1px solid #25252e;
+      border-radius: 14px;
+
+      background: #13131b;
+
+      display: flex;
+      align-items: center;
+
+      gap: 12px;
+    }
+
+    .track-info {
+      flex: 1;
+
+      min-width: 0;
+
+      display: flex;
+      flex-direction: column;
+
+      gap: 4px;
+    }
+
+    .track-info strong {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .track-info small {
+      color: #858592;
+    }
+
+    .play {
+      width: 40px;
+      height: 40px;
+
+      border: 0;
+      border-radius: 50%;
+
+      background: #6c63ff;
+      color: white;
+    }
+
+    /* VIDEO */
+
+    .video-upload {
+      min-height: 170px;
+
+      border: 1px dashed #3a3a47;
+      border-radius: 18px;
+
+      background: #101017;
+
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+
+      gap: 8px;
+
+      text-align: center;
+
+      cursor: pointer;
+    }
+
+    .video-upload span {
+      font-size: 40px;
+    }
+
+    .video-upload small {
+      color: #777783;
+    }
+
+    .preview {
+      min-height: 190px;
+
+      margin-top: 15px;
+
+      border: 1px solid #25252e;
+      border-radius: 18px;
+
+      background: #030305;
+
+      display: grid;
+      place-items: center;
+
+      color: #666672;
+
+      overflow: hidden;
+    }
+
+    .preview video {
+      width: 100%;
+      max-height: 450px;
+    }
+
+    .tools {
+      margin-top: 14px;
+
+      display: grid;
+      grid-template-columns:
+        repeat(4, 1fr);
+
+      gap: 8px;
+    }
+
+    .tools button {
+      padding: 12px;
+
+      border: 1px solid #292933;
+      border-radius: 12px;
+
+      background: #171720;
+      color: white;
+    }
+
+    /* CHATS */
+
+    .chat-list {
+      margin-top: 18px;
+
+      display: flex;
+      flex-direction: column;
+
+      gap: 10px;
+    }
+
+    .chat {
+      padding: 15px;
+
+      border: 1px solid #25252e;
+      border-radius: 16px;
+
+      background: #13131b;
+
+      display: flex;
+      align-items: center;
+
+      gap: 12px;
+    }
+
+    .chat-icon {
+      width: 45px;
+      height: 45px;
+
+      display: grid;
+      place-items: center;
+
+      border-radius: 13px;
+
+      background: #282540;
+    }
+
+    .chat-info {
+      flex: 1;
+
+      display: flex;
+      flex-direction: column;
+
+      gap: 4px;
+    }
+
+    .chat-info small {
+      color: #858592;
+    }
+
+    .empty {
+      padding: 30px;
+
+      border: 1px dashed #30303a;
+      border-radius: 16px;
+
+      text-align: center;
+
+      color: #777783;
+    }
+
+    /* PROFILE */
+
+    .profile {
+      padding: 30px 20px;
+
+      border: 1px solid #25252e;
+      border-radius: 22px;
+
+      background: #13131b;
+
+      text-align: center;
+    }
+
+    .avatar {
+      width: 85px;
+      height: 85px;
+
+      margin: 0 auto 15px;
+
+      display: grid;
+      place-items: center;
+
+      border-radius: 50%;
+
+      background: #6c63ff;
+
+      font-size: 32px;
+      font-weight: 800;
+    }
+
+    .profile p {
+      color: #858592;
+
+      margin-top: 5px;
+    }
+
+    /* BOTTOM NAV */
+
+    .nav {
+      position: fixed;
+
+      left: 0;
+      right: 0;
+      bottom: 0;
+
+      height: 74px;
+
+      background: #0d0d13;
+      border-top: 1px solid #25252e;
+
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+
+      z-index: 200;
+    }
+
+    .nav button {
+      min-width: 55px;
+
+      border: 0;
+      background: transparent;
+
+      color: #777783;
+
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      gap: 4px;
+    }
+
+    .nav button.active {
+      color: white;
+    }
+
+    .nav button span {
+      font-size: 21px;
+    }
+
+    .nav button small {
+      font-size: 10px;
+    }
+
+    /* REGISTRATION */
+
+    #registration {
+      position: fixed;
+
+      inset: 0;
+
+      z-index: 1000;
+
+      background: #08080c;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      padding: 20px;
+    }
+
+    .register-box {
+      width: 100%;
+      max-width: 400px;
+
+      padding: 30px 22px;
+
+      border: 1px solid #292933;
+      border-radius: 24px;
+
+      background: #13131b;
+
+      text-align: center;
+    }
+
+    .register-logo {
+      font-size: 29px;
+      font-weight: 800;
+
+      letter-spacing: 4px;
+
+      margin-bottom: 10px;
+    }
+
+    .register-box p {
+      color: #888895;
+      line-height: 1.5;
+
+      margin-bottom: 23px;
+    }
+
+    .login {
+      width: 100%;
+
+      padding: 14px;
+
+      margin-bottom: 10px;
+
+      border: 1px solid #292933;
+      border-radius: 12px;
+
+      background: #20202a;
+      color: white;
+
+      font-weight: 600;
+    }
+
+    .register-input {
+      width: 100%;
+
+      padding: 14px;
+
+      margin-bottom: 10px;
+
+      border: 1px solid #292933;
+      border-radius: 12px;
+
+      background: #0b0b10;
+      color: white;
+
+      outline: none;
+    }
+
+    .divider {
+      color: #666672;
+      margin: 13px 0;
+    }
+
+    .register-box small {
+      display: block;
+
+      margin-top: 15px;
+
+      color: #666672;
+      line-height: 1.5;
+    }
+
+    /* MOBILE */
+
+    @media (max-width: 650px) {
+
+      .cards {
+        grid-template-columns: 1fr;
+      }
+
+      .card {
+        min-height: 120px;
+      }
+
+      .tools {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .hero h1 {
+        font-size: 50px;
+      }
+
+    }
+  </style>
 </head>
+
 
 <body>
 
-  <header class="header">
-    <h1>WORKCHAT</h1>
-    <p>Создавай. Общайся. Твори.</p>
-  </header>
+  <!-- =========================
+       REGISTRATION
+  ========================== -->
 
-  <main class="main">
+  <div id="registration">
 
-    <section class="welcome">
-      <h2>Что ты хочешь делать?</h2>
+    <div class="register-box">
 
-      <div class="action-buttons">
+      <div class="register-logo">
+        WORKCHAT
+      </div>
 
-        <button class="action-button" data-action="edit">
-          🎬
-          <span>Монтаж</span>
+      <p>
+        Создай аккаунт и начни творить.
+      </p>
+
+      <button
+        class="login"
+        id="google"
+      >
+        🔵 Продолжить с Google
+      </button>
+
+      <button
+        class="login"
+        id="facebook"
+      >
+        🔷 Продолжить с Facebook
+      </button>
+
+      <div class="divider">
+        или
+      </div>
+
+      <button
+        class="login"
+        id="email"
+      >
+        ✉️ Ввести email
+      </button>
+
+      <button
+        class="login"
+        id="phone"
+      >
+        📱 Использовать номер
+      </button>
+
+      <small>
+        Это тестовая версия WORKCHAT.
+        Настоящую авторизацию подключим
+        после запуска backend.
+      </small>
+
+    </div>
+
+  </div>
+
+
+  <!-- =========================
+       APP
+  ========================== -->
+
+  <div id="app">
+
+    <header class="topbar">
+
+      <div class="logo">
+        WORKCHAT
+      </div>
+
+      <button
+        class="theme-button"
+        id="theme"
+      >
+        ☾
+      </button>
+
+    </header>
+
+
+    <main>
+
+      <!-- HOME -->
+
+      <section
+        class="page active"
+        id="home"
+      >
+
+        <div class="hero">
+
+          <div class="label">
+            CREATIVE PLATFORM
+          </div>
+
+          <h1>
+            Создавай.<br>
+            Общайся.<br>
+            Твори.
+          </h1>
+
+          <p>
+            WORKCHAT — пространство для
+            начинающих креаторов.
+            Музыка, видео, общение и
+            творчество в одном месте.
+          </p>
+
+          <button
+            class="primary"
+            data-open="create"
+          >
+            + Создать
+          </button>
+
+        </div>
+
+
+        <div class="title">
+          Популярные разделы
+        </div>
+
+
+        <div class="cards">
+
+          <button
+            class="card"
+            data-open="music"
+          >
+
+            <span class="card-icon">
+              🎵
+            </span>
+
+            <strong>
+              Музыка
+            </strong>
+
+            <small>
+              Добавляй и слушай свои треки.
+            </small>
+
+          </button>
+
+
+          <button
+            class="card"
+            data-open="editing"
+          >
+
+            <span class="card-icon">
+              🎬
+            </span>
+
+            <strong>
+              Монтаж
+            </strong>
+
+            <small>
+              Загружай видео и смотри
+              предпросмотр.
+            </small>
+
+          </button>
+
+
+          <button
+            class="card"
+            data-open="chats"
+          >
+
+            <span class="card-icon">
+              💬
+            </span>
+
+            <strong>
+              Чаты
+            </strong>
+
+            <small>
+              Создавай комнаты до 40 человек.
+            </small>
+
+          </button>
+
+        </div>
+
+      </section>
+
+
+      <!-- CREATE -->
+
+      <section
+        class="page"
+        id="create"
+      >
+
+        <div class="page-title">
+
+          <span class="page-title-icon">
+            ➕
+          </span>
+
+          <div>
+            <h2>Создать</h2>
+            <p>
+              Выбери направление.
+            </p>
+          </div>
+
+        </div>
+
+
+        <div class="cards">
+
+          <button
+            class="card"
+            data-open="music"
+          >
+            <span class="card-icon">🎵</span>
+            <strong>Музыку</strong>
+            <small>
+              Добавить собственный трек.
+            </small>
+          </button>
+
+
+          <button
+            class="card"
+            data-open="editing"
+          >
+            <span class="card-icon">🎬</span>
+            <strong>Видео</strong>
+            <small>
+              Загрузить видео для работы.
+            </small>
+          </button>
+
+
+          <button
+            class="card"
+            data-open="chats"
+          >
+            <span class="card-icon">💬</span>
+            <strong>Чат</strong>
+            <small>
+              Создать комнату.
+            </small>
+          </button>
+
+        </div>
+
+      </section>
+
+
+      <!-- MUSIC -->
+
+      <section
+        class="page"
+        id="music"
+      >
+
+        <div class="page-title">
+
+          <span class="page-title-icon">
+            🎵
+          </span>
+
+          <div>
+            <h2>Музыка</h2>
+            <p>
+              Твоя библиотека.
+            </p>
+          </div>
+
+        </div>
+
+
+        <label class="upload">
+
+          + Добавить трек
+
+          <input
+            id="audio"
+            type="file"
+            accept="audio/*"
+            hidden
+          >
+
+        </label>
+
+
+        <div class="music-player">
+
+          <div class="music-info">
+
+            <div class="music-cover">
+              🎵
+            </div>
+
+            <div class="music-name">
+
+              <strong id="trackName">
+                Трек не выбран
+              </strong>
+
+              <span>
+                WORKCHAT
+              </span>
+
+            </div>
+
+          </div>
+
+
+          <audio
+            id="player"
+            controls
+          ></audio>
+
+        </div>
+
+
+        <div class="title">
+          Мои треки
+        </div>
+
+
+        <div
+          class="tracks"
+          id="tracks"
+        >
+
+          <div class="empty">
+            Добавь первый трек.
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- EDITING -->
+
+      <section
+        class="page"
+        id="editing"
+      >
+
+        <div class="page-title">
+
+          <span class="page-title-icon">
+            🎬
+          </span>
+
+          <div>
+            <h2>Монтаж</h2>
+            <p>
+              Загрузка и предпросмотр видео.
+            </p>
+          </div>
+
+        </div>
+
+
+        <label class="video-upload">
+
+          <span>
+            🎬
+          </span>
+
+          <strong>
+            Выбрать видео
+          </strong>
+
+          <small>
+            Нажми, чтобы выбрать файл
+          </small>
+
+          <input
+            id="video"
+            type="file"
+            accept="video/*"
+            hidden
+          >
+
+        </label>
+
+
+        <div
+          class="preview"
+          id="preview"
+        >
+          Предпросмотр появится здесь.
+        </div>
+
+
+        <div class="tools">
+
+          <button>
+            ✂️ Обрезать
+          </button>
+
+          <button>
+            🎵 Музыка
+          </button>
+
+          <button>
+            ✨ Эффекты
+          </button>
+
+          <button>
+            📝 Текст
+          </button>
+
+        </div>
+
+      </section>
+
+
+      <!-- CHATS -->
+
+      <section
+        class="page"
+        id="chats"
+      >
+
+        <div class="page-title">
+
+          <span class="page-title-icon">
+            💬
+          </span>
+
+          <div>
+            <h2>Чаты</h2>
+            <p>
+              Общение креаторов.
+            </p>
+          </div>
+
+        </div>
+
+
+        <button
+          class="primary"
+          id="newChat"
+        >
+          + Создать комнату
         </button>
 
-        <button class="action-button" data-action="music">
+
+        <div
+          class="chat-list"
+          id="chatList"
+        >
+
+          <div class="empty">
+            Пока нет комнат.
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- PROFILE -->
+
+      <section
+        class="page"
+        id="profile"
+      >
+
+        <div class="profile">
+
+          <div
+            class="avatar"
+            id="avatar"
+          >
+            W
+          </div>
+
+          <h2 id="username">
+            WORKCHAT User
+          </h2>
+
+          <p>
+            Новый креатор WORKCHAT
+          </p>
+
+        </div>
+
+      </section>
+
+    </main>
+
+
+    <!-- NAVIGATION -->
+
+    <nav class="nav">
+
+      <button
+        class="active"
+        data-nav="home"
+      >
+        <span>⌂</span>
+        <small>Главная</small>
+      </button>
+
+
+      <button
+        data-nav="music"
+      >
+        <span>♫</span>
+        <small>Музыка</small>
+      </button>
+
+
+      <button
+        data-nav="create"
+      >
+        <span>＋</span>
+        <small>Создать</small>
+      </button>
+
+
+      <button
+        data-nav="chats"
+      >
+        <span>☷</span>
+        <small>Чаты</small>
+      </button>
+
+
+      <button
+        data-nav="profile"
+      >
+        <span>●</span>
+        <small>Профиль</small>
+      </button>
+
+    </nav>
+
+  </div>
+
+
+  <!-- =========================
+       JAVASCRIPT
+  ========================== -->
+
+  <script>
+
+    /* REGISTRATION */
+
+    const registration =
+      document.getElementById("registration");
+
+    const saved =
+      localStorage.getItem("workchat-user");
+
+    function finishLogin(name) {
+
+      localStorage.setItem(
+        "workchat-user",
+        name
+      );
+
+      registration.style.display = "none";
+
+      updateProfile();
+    }
+
+
+    if (saved) {
+
+      registration.style.display = "none";
+
+    }
+
+
+    document
+      .getElementById("google")
+      .onclick = function() {
+
+        alert(
+          "Google OAuth подключим на следующем этапе."
+        );
+
+      };
+
+
+    document
+      .getElementById("facebook")
+      .onclick = function() {
+
+        alert(
+          "Facebook OAuth подключим на следующем этапе."
+        );
+
+      };
+
+
+    document
+      .getElementById("email")
+      .onclick = function() {
+
+        const box =
+          document.querySelector(".register-box");
+
+        box.innerHTML = `
+
+          <div class="register-logo">
+            WORKCHAT
+          </div>
+
+          <p>
+            Регистрация через email
+          </p>
+
+          <input
+            class="register-input"
+            id="emailInput"
+            type="email"
+            placeholder="example@email.com"
+          >
+
+          <input
+            class="register-input"
+            id="passwordInput"
+            type="password"
+            placeholder="Пароль"
+          >
+
+          <button
+            class="login"
+            id="emailSubmit"
+          >
+            Создать аккаунт
+          </button>
+
+          <button
+            class="login"
+            id="back"
+          >
+            ← Назад
+          </button>
+
+        `;
+
+
+        document
+          .getElementById("emailSubmit")
+          .onclick = function() {
+
+            const email =
+              document
+                .getElementById("emailInput")
+                .value
+                .trim();
+
+            const password =
+              document
+                .getElementById("passwordInput")
+                .value;
+
+
+            if (!email.includes("@")) {
+
+              alert(
+                "Введите корректный email."
+              );
+
+              return;
+            }
+
+
+            if (password.length < 6) {
+
+              alert(
+                "Пароль должен содержать минимум 6 символов."
+              );
+
+              return;
+            }
+
+
+            finishLogin(email);
+
+            alert(
+              "Аккаунт создан! Добро пожаловать в WORKCHAT."
+            );
+
+          };
+
+
+        document
+          .getElementById("back")
+          .onclick = function() {
+
+            location.reload();
+
+          };
+
+      };
+
+
+    document
+      .getElementById("phone")
+      .onclick = function() {
+
+        const box =
+          document.querySelector(".register-box");
+
+        box.innerHTML = `
+
+          <div class="register-logo">
+            WORKCHAT
+          </div>
+
+          <p>
+            Регистрация через телефон
+          </p>
+
+          <input
+            class="register-input"
+            id="phoneInput"
+            type="tel"
+            placeholder="+996 555 123 456"
+          >
+
+          <button
+            class="login"
+            id="phoneSubmit"
+          >
+            Продолжить
+          </button>
+
+          <button
+            class="login"
+            id="back"
+          >
+            ← Назад
+          </button>
+
+        `;
+
+
+        document
+          .getElementById("phoneSubmit")
+          .onclick = function() {
+
+            const phone =
+              document
+                .getElementById("phoneInput")
+                .value
+                .trim();
+
+
+            if (phone.length < 7) {
+
+              alert(
+                "Введите корректный номер."
+              );
+
+              return;
+            }
+
+
+            finishLogin(phone);
+
+            alert(
+              "Добро пожаловать в WORKCHAT!"
+            );
+
+          };
+
+
+        document
+          .getElementById("back")
+          .onclick = function() {
+
+            location.reload();
+
+          };
+
+      };
+
+
+    /* NAVIGATION */
+
+    const pages =
+      document.querySelectorAll(".page");
+
+    const navButtons =
+      document.querySelectorAll("[data-nav]");
+
+    const openButtons =
+      document.querySelectorAll("[data-open]");
+
+
+    function openPage(name) {
+
+      pages.forEach(function(page) {
+
+        page.classList.remove("active");
+
+      });
+
+
+      const target =
+        document.getElementById(name);
+
+
+      if (target) {
+
+        target.classList.add("active");
+
+      }
+
+
+      navButtons.forEach(function(button) {
+
+        button.classList.remove("active");
+
+        if (
+          button.dataset.nav === name
+        ) {
+
+          button.classList.add("active");
+
+        }
+
+      });
+
+
+      window.scrollTo(0, 0);
+
+    }
+
+
+    navButtons.forEach(function(button) {
+
+      button.onclick = function() {
+
+        openPage(
+          button.dataset.nav
+        );
+
+      };
+
+    });
+
+
+    openButtons.forEach(function(button) {
+
+      button.onclick = function() {
+
+        openPage(
+          button.dataset.open
+        );
+
+      };
+
+    });
+
+
+    /* THEME */
+
+    document
+      .getElementById("theme")
+      .onclick = function() {
+
+        document.body.classList.toggle(
+          "light"
+        );
+
+      };
+
+
+    /* MUSIC */
+
+    const audio =
+      document.getElementById("audio");
+
+    const player =
+      document.getElementById("player");
+
+    const tracks =
+      document.getElementById("tracks");
+
+    const trackName =
+      document.getElementById("trackName");
+
+
+    audio.onchange = function() {
+
+      const file =
+        audio.files[0];
+
+      if (!file) return;
+
+
+      const url =
+        URL.createObjectURL(file);
+
+
+      tracks.innerHTML = "";
+
+
+      const item =
+        document.createElement("div");
+
+      item.className = "track";
+
+
+      item.innerHTML = `
+
+        <div>
           🎵
-          <span>Музыка</span>
+        </div>
+
+        <div class="track-info">
+
+          <strong>
+            ${file.name}
+          </strong>
+
+          <small>
+            WORKCHAT Creator
+          </small>
+
+        </div>
+
+        <button
+          class="play"
+        >
+          ▶
         </button>
 
-        <button class="action-button" data-action="chat">
+      `;
+
+
+      item
+        .querySelector(".play")
+        .onclick = function() {
+
+          player.src = url;
+
+          player.play();
+
+          trackName.textContent =
+            file.name;
+
+        };
+
+
+      tracks.appendChild(item);
+
+
+      player.src = url;
+
+      trackName.textContent =
+        file.name;
+
+    };
+
+
+    /* VIDEO */
+
+    const video =
+      document.getElementById("video");
+
+    const preview =
+      document.getElementById("preview");
+
+
+    video.onchange = function() {
+
+      const file =
+        video.files[0];
+
+      if (!file) return;
+
+
+      const url =
+        URL.createObjectURL(file);
+
+
+      preview.innerHTML = "";
+
+
+      const element =
+        document.createElement("video");
+
+
+      element.src = url;
+
+      element.controls = true;
+
+      element.playsInline = true;
+
+
+      preview.appendChild(element);
+
+    };
+
+
+    /* CHATS */
+
+    const newChat =
+      document.getElementById("newChat");
+
+    const chatList =
+      document.getElementById("chatList");
+
+
+    newChat.onclick = function() {
+
+      const name =
+        prompt(
+          "Название комнаты:"
+        );
+
+
+      if (!name) return;
+
+
+      const chat =
+        document.createElement("div");
+
+
+      chat.className = "chat";
+
+
+      chat.innerHTML = `
+
+        <div class="chat-icon">
           💬
-          <span>Чаты</span>
-        </button>
+        </div>
 
-        <button class="action-button" data-action="profile">
-          👤
-          <span>Профиль</span>
-        </button>
+        <div class="chat-info">
 
-      </div>
-    </section>
+          <strong>
+            ${name}
+          </strong>
 
-    <section class="popular">
+          <small>
+            1 / 40 участников
+          </small>
 
-      <h2>Популярное</h2>
+        </div>
 
-      <div class="card">
-        <h3>🎬 Лучшие эдиты</h3>
-        <p>Смотри работы других пользователей.</p>
-      </div>
+      `;
 
-      <div class="card">
-        <h3>🎵 Новая музыка</h3>
-        <p>Слушай треки начинающих авторов.</p>
-      </div>
 
-      <div class="card">
-        <h3>💬 Активные чаты</h3>
-        <p>Общайся с другими креаторами.</p>
-      </div>
+      const empty =
+        chatList.querySelector(".empty");
 
-    </section>
 
-  </main>
+      if (empty) {
+        empty.remove();
+      }
 
-  <nav class="bottom-nav">
 
-    <button class="nav-button active" data-page="home">
-      🏠
-      <span>Главная</span>
-    </button>
+      chatList.appendChild(chat);
 
-    <button class="nav-button" data-page="create">
-      ➕
-      <span>Создать</span>
-    </button>
+    };
 
-    <button class="nav-button" data-page="music">
-      🎵
-      <span>Музыка</span>
-    </button>
 
-    <button class="nav-button" data-page="chat">
-      💬
-      <span>Чаты</span>
-    </button>
+    /* PROFILE */
 
-    <button class="nav-button" data-page="profile">
-      👤
-      <span>Профиль</span>
-    </button>
+    function updateProfile() {
 
-  </nav>
+      const user =
+        localStorage.getItem(
+          "workchat-user"
+        );
 
-  <script src="script.js"></script>
+
+      if (!user) return;
+
+
+      const username =
+        document.getElementById(
+          "username"
+        );
+
+
+      const avatar =
+        document.getElementById(
+          "avatar"
+        );
+
+
+      username.textContent =
+        user;
+
+
+      avatar.textContent =
+        user
+          .charAt(0)
+          .toUpperCase();
+
+    }
+
+
+    updateProfile();
+
+
+    console.log(
+      "WORKCHAT is running."
+    );
+
+  </script>
 
 </body>
-
 </html>
