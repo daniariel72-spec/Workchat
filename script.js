@@ -1,926 +1,591 @@
-/* =========================
-   WORKCHAT 1.0
-========================= */
+document.addEventListener("DOMContentLoaded", () => {
 
+  /* =========================
+     REGISTRATION
+  ========================= */
 
-/* =========================
-   NAVIGATION
-========================= */
+  const registrationScreen =
+    document.getElementById("registrationScreen");
 
-const pages = document.querySelectorAll(".page");
-const navButtons = document.querySelectorAll(".nav-button");
-const pageButtons = document.querySelectorAll("[data-page-button]");
+  const registered =
+    localStorage.getItem("workchatRegistered");
 
-function openPage(pageName) {
+  const savedUser =
+    localStorage.getItem("workchatUser");
 
-  pages.forEach(page => {
-    page.classList.remove("active-page");
-  });
-
-  const target = document.getElementById(pageName + "Page");
-
-  if (target) {
-    target.classList.add("active-page");
+  function hideRegistration() {
+    if (registrationScreen) {
+      registrationScreen.style.display = "none";
+    }
   }
+
+  function showRegistration() {
+    if (registrationScreen) {
+      registrationScreen.style.display = "flex";
+    }
+  }
+
+  if (registered === "true") {
+    hideRegistration();
+  } else {
+    showRegistration();
+  }
+
+
+  /* =========================
+     EMAIL
+  ========================= */
+
+  const emailLogin =
+    document.getElementById("emailLogin");
+
+  if (emailLogin) {
+    emailLogin.onclick = () => {
+
+      const box =
+        document.querySelector(".registration-box");
+
+      box.innerHTML = `
+        <div class="registration-logo">
+          WORKCHAT
+        </div>
+
+        <p>
+          Введи email для создания аккаунта
+        </p>
+
+        <input
+          id="emailInput"
+          type="email"
+          placeholder="example@email.com"
+          style="
+            width:100%;
+            padding:14px;
+            margin-bottom:10px;
+            border-radius:12px;
+            border:1px solid #292933;
+            background:#0b0b10;
+            color:white;
+          "
+        >
+
+        <input
+          id="passwordInput"
+          type="password"
+          placeholder="Пароль"
+          style="
+            width:100%;
+            padding:14px;
+            margin-bottom:12px;
+            border-radius:12px;
+            border:1px solid #292933;
+            background:#0b0b10;
+            color:white;
+          "
+        >
+
+        <button
+          id="emailContinue"
+          class="login-button"
+        >
+          Продолжить
+        </button>
+
+        <button
+          id="backLogin"
+          class="login-button"
+        >
+          ← Назад
+        </button>
+      `;
+
+      document.getElementById("emailContinue").onclick =
+        () => {
+
+          const email =
+            document.getElementById("emailInput").value.trim();
+
+          const password =
+            document.getElementById("passwordInput").value;
+
+          if (!email.includes("@")) {
+            alert("Введите правильный email.");
+            return;
+          }
+
+          if (password.length < 6) {
+            alert("Пароль должен содержать минимум 6 символов.");
+            return;
+          }
+
+          completeRegistration(email);
+        };
+
+      document.getElementById("backLogin").onclick =
+        () => location.reload();
+    };
+  }
+
+
+  /* =========================
+     PHONE
+  ========================= */
+
+  const phoneLogin =
+    document.getElementById("phoneLogin");
+
+  if (phoneLogin) {
+    phoneLogin.onclick = () => {
+
+      const box =
+        document.querySelector(".registration-box");
+
+      box.innerHTML = `
+        <div class="registration-logo">
+          WORKCHAT
+        </div>
+
+        <p>
+          Введи номер телефона
+        </p>
+
+        <input
+          id="phoneInput"
+          type="tel"
+          placeholder="+996 555 123 456"
+          style="
+            width:100%;
+            padding:14px;
+            margin-bottom:12px;
+            border-radius:12px;
+            border:1px solid #292933;
+            background:#0b0b10;
+            color:white;
+          "
+        >
+
+        <button
+          id="phoneContinue"
+          class="login-button"
+        >
+          Получить код
+        </button>
+
+        <button
+          id="backLogin"
+          class="login-button"
+        >
+          ← Назад
+        </button>
+      `;
+
+      document.getElementById("phoneContinue").onclick =
+        () => {
+
+          const phone =
+            document.getElementById("phoneInput").value.trim();
+
+          if (phone.length < 7) {
+            alert("Введите правильный номер.");
+            return;
+          }
+
+          completeRegistration(phone);
+        };
+
+      document.getElementById("backLogin").onclick =
+        () => location.reload();
+    };
+  }
+
+
+  /* =========================
+     GOOGLE / FACEBOOK
+  ========================= */
+
+  document.getElementById("googleLogin")?.addEventListener(
+    "click",
+    () => {
+      alert("Настоящий вход через Google подключим позже.");
+    }
+  );
+
+  document.getElementById("facebookLogin")?.addEventListener(
+    "click",
+    () => {
+      alert("Настоящий вход через Facebook подключим позже.");
+    }
+  );
+
+
+  /* =========================
+     REGISTRATION COMPLETE
+  ========================= */
+
+  function completeRegistration(user) {
+
+    localStorage.setItem(
+      "workchatRegistered",
+      "true"
+    );
+
+    localStorage.setItem(
+      "workchatUser",
+      user
+    );
+
+    hideRegistration();
+
+    updateProfile();
+
+    alert("Добро пожаловать в WORKCHAT! 🎉");
+  }
+
+
+  /* =========================
+     NAVIGATION
+  ========================= */
+
+  const pages =
+    document.querySelectorAll(".page");
+
+  const navButtons =
+    document.querySelectorAll(".nav-button");
+
+  const pageButtons =
+    document.querySelectorAll("[data-page-button]");
+
+
+  function openPage(name) {
+
+    pages.forEach(page => {
+      page.classList.remove("active-page");
+    });
+
+    const page =
+      document.getElementById(name + "Page");
+
+    if (page) {
+      page.classList.add("active-page");
+    }
+
+    navButtons.forEach(button => {
+      button.classList.remove("active");
+
+      if (button.dataset.page === name) {
+        button.classList.add("active");
+      }
+    });
+
+    window.scrollTo(0, 0);
+  }
+
 
   navButtons.forEach(button => {
 
-    if (button.dataset.page === pageName) {
-      button.classList.add("active");
-    } else {
-      button.classList.remove("active");
-    }
-
-  });
-
-  window.scrollTo({
-    top: 0,
-    behavior: "smooth"
-  });
-}
-
-
-navButtons.forEach(button => {
-
-  button.addEventListener("click", () => {
-
-    openPage(button.dataset.page);
-
-  });
-
-});
-
-
-pageButtons.forEach(button => {
-
-  button.addEventListener("click", () => {
-
-    openPage(button.dataset.pageButton);
-
-  });
-
-});
-
-
-/* =========================
-   THEME
-========================= */
-
-const themeButton = document.getElementById("themeButton");
-
-const savedTheme = localStorage.getItem("workchat-theme");
-
-if (savedTheme === "light") {
-  document.body.classList.add("light");
-  themeButton.textContent = "☀";
-}
-
-themeButton.addEventListener("click", () => {
-
-  document.body.classList.toggle("light");
-
-  const light = document.body.classList.contains("light");
-
-  localStorage.setItem(
-    "workchat-theme",
-    light ? "light" : "dark"
-  );
-
-  themeButton.textContent = light ? "☀" : "☾";
-
-});
-
-
-/* =========================
-   MODAL
-========================= */
-
-const modal = document.getElementById("modal");
-const modalTitle = document.getElementById("modalTitle");
-const modalBody = document.getElementById("modalBody");
-const closeModal = document.getElementById("closeModal");
-
-function showModal(title, content) {
-
-  modalTitle.textContent = title;
-  modalBody.innerHTML = content;
-
-  modal.classList.remove("hidden");
-}
-
-closeModal.addEventListener("click", () => {
-  modal.classList.add("hidden");
-});
-
-modal.addEventListener("click", event => {
-
-  if (event.target === modal) {
-    modal.classList.add("hidden");
-  }
-
-});
-
-
-/* =========================
-   VIDEO EDITOR
-========================= */
-
-const videoInput = document.getElementById("videoInput");
-const videoPreview = document.getElementById("videoPreview");
-const editorStatus = document.getElementById("editorStatus");
-
-videoInput.addEventListener("change", event => {
-
-  const file = event.target.files[0];
-
-  if (!file) return;
-
-  const videoURL = URL.createObjectURL(file);
-
-  videoPreview.innerHTML = `
-    <video
-      src="${videoURL}"
-      controls
-      style="width:100%;height:100%;object-fit:contain;border-radius:15px;"
-    ></video>
-  `;
-
-  editorStatus.textContent =
-    "Видео загружено: " + file.name;
-
-});
-
-
-document.getElementById("trimButton").addEventListener("click", () => {
-
-  showModal(
-    "✂️ Обрезка",
-    `
-      <p>
-        Это первая версия редактора.
-      </p>
-
-      <p style="margin-top:10px;color:#9b9ba8;">
-        Настоящая обрезка и экспорт видео будут
-        добавлены следующим этапом.
-      </p>
-    `
-  );
-
-});
-
-
-document.getElementById("textButton").addEventListener("click", () => {
-
-  showModal(
-    "🔤 Текст",
-    `
-      <input
-        id="editorTextInput"
-        type="text"
-        placeholder="Введите текст"
-        style="
-          width:100%;
-          padding:12px;
-          background:#0b0b10;
-          color:white;
-          border:1px solid #282833;
-          border-radius:10px;
-        "
-      >
-
-      <button
-        id="saveEditorText"
-        class="primary-button"
-        style="margin-top:12px;"
-      >
-        Добавить
-      </button>
-    `
-  );
-
-
-  document
-    .getElementById("saveEditorText")
-    .addEventListener("click", () => {
-
-      const text =
-        document.getElementById("editorTextInput").value.trim();
-
-      if (!text) return;
-
-      editorStatus.textContent =
-        "Добавлен текст: " + text;
-
-      modal.classList.add("hidden");
-
+    button.addEventListener("click", () => {
+      openPage(button.dataset.page);
     });
 
-});
+  });
 
 
-document
-  .getElementById("musicToVideoButton")
-  .addEventListener("click", () => {
+  pageButtons.forEach(button => {
 
-    showModal(
-      "🎵 Музыка",
-      `
-        <p>
-          Выбери трек из музыкального раздела
-          для будущего проекта.
-        </p>
-      `
-    );
+    button.addEventListener("click", () => {
+      openPage(button.dataset.pageButton);
+    });
 
   });
 
 
-/* =========================
-   MUSIC
-========================= */
+  /* =========================
+     THEME
+  ========================= */
 
-let tracks =
-  JSON.parse(localStorage.getItem("workchat-tracks")) || [];
+  const themeButton =
+    document.getElementById("themeButton");
 
-const audioInput = document.getElementById("audioInput");
-const audioPlayer = document.getElementById("audioPlayer");
-const trackList = document.getElementById("trackList");
-const currentTrack = document.getElementById("currentTrack");
-const currentArtist = document.getElementById("currentArtist");
-const albumCount = document.getElementById("albumCount");
-const trackStat = document.getElementById("trackStat");
+  if (themeButton) {
 
+    themeButton.onclick = () => {
 
-function saveTracks() {
+      document.body.classList.toggle("light");
 
-  /*
-    Важно:
-    локальные File/Blob нельзя нормально сохранять
-    в localStorage между сессиями.
+      themeButton.textContent =
+        document.body.classList.contains("light")
+          ? "☀"
+          : "☾";
+    };
 
-    Поэтому здесь сохраняются названия треков
-    для демонстрационного прототипа.
-  */
-
-  localStorage.setItem(
-    "workchat-tracks",
-    JSON.stringify(
-      tracks.map(track => ({
-        name: track.name
-      }))
-    )
-  );
-
-}
+  }
 
 
-function renderTracks() {
+  /* =========================
+     MUSIC
+  ========================= */
 
-  trackList.innerHTML = "";
+  const audioInput =
+    document.getElementById("audioInput");
 
-  if (tracks.length === 0) {
+  const audioPlayer =
+    document.getElementById("audioPlayer");
 
-    trackList.innerHTML = `
-      <p class="empty-state">
-        Пока нет треков.
-      </p>
-    `;
+  const trackList =
+    document.getElementById("trackList");
 
-  } else {
+  const currentTrack =
+    document.getElementById("currentTrack");
 
-    tracks.forEach((track, index) => {
+  const currentArtist =
+    document.getElementById("currentArtist");
 
-      const element =
+  const albumCount =
+    document.getElementById("albumCount");
+
+  const trackStat =
+    document.getElementById("trackStat");
+
+  let tracks = [];
+
+
+  function renderTracks() {
+
+    if (!trackList) return;
+
+    trackList.innerHTML = "";
+
+    if (tracks.length === 0) {
+
+      trackList.innerHTML = `
+        <div class="empty-state">
+          Добавь свой первый трек.
+        </div>
+      `;
+
+    }
+
+    tracks.forEach(track => {
+
+      const item =
         document.createElement("div");
 
-      element.className = "track";
+      item.className = "track";
 
-      element.innerHTML = `
+      item.innerHTML = `
         <div class="track-icon">
           🎵
         </div>
 
         <div class="track-info">
-          <strong>${escapeHTML(track.name)}</strong>
+          <strong>${track.name}</strong>
           <span>WORKCHAT Creator</span>
         </div>
 
-        <button
-          class="track-play"
-          data-track-index="${index}"
-        >
+        <button class="track-play">
           ▶
         </button>
       `;
 
-      trackList.appendChild(element);
+      item.querySelector(".track-play").onclick =
+        () => {
+
+          if (audioPlayer) {
+            audioPlayer.src = track.url;
+            audioPlayer.play();
+          }
+
+          if (currentTrack) {
+            currentTrack.textContent = track.name;
+          }
+
+          if (currentArtist) {
+            currentArtist.textContent =
+              "WORKCHAT Creator";
+          }
+        };
+
+      trackList.appendChild(item);
 
     });
 
-  }
-
-  albumCount.textContent =
-    tracks.length +
-    (tracks.length === 1 ? " трек" : " треков");
-
-  trackStat.textContent = tracks.length;
-
-
-  document
-    .querySelectorAll(".track-play")
-    .forEach(button => {
-
-      button.addEventListener("click", () => {
-
-        const index =
-          Number(button.dataset.trackIndex);
-
-        playTrack(index);
-
-      });
-
-    });
-
-}
-
-
-function playTrack(index) {
-
-  const track = tracks[index];
-
-  if (!track) return;
-
-  currentTrack.textContent = track.name;
-  currentArtist.textContent = "WORKCHAT Creator";
-
-  if (track.url) {
-
-    audioPlayer.src = track.url;
-
-    audioPlayer.play().catch(() => {});
-
-  }
-
-}
-
-
-audioInput.addEventListener("change", event => {
-
-  const file = event.target.files[0];
-
-  if (!file) return;
-
-  const url = URL.createObjectURL(file);
-
-  tracks.push({
-    name: file.name,
-    url: url
-  });
-
-  saveTracks();
-  renderTracks();
-
-});
-
-
-document
-  .getElementById("clearMusicButton")
-  .addEventListener("click", () => {
-
-    tracks = [];
-
-    localStorage.removeItem("workchat-tracks");
-
-    audioPlayer.pause();
-    audioPlayer.removeAttribute("src");
-
-    renderTracks();
-
-  });
-
-
-renderTracks();
-
-
-/* =========================
-   CHATS
-========================= */
-
-let chats =
-  JSON.parse(localStorage.getItem("workchat-chats")) || [
-
-    {
-      id: 1,
-      name: "🎬 Монтаж",
-      members: 1,
-      messages: [
-        {
-          user: "WORKCHAT",
-          text: "Добро пожаловать в чат!"
-        }
-      ]
-    },
-
-    {
-      id: 2,
-      name: "🎵 Музыка",
-      members: 1,
-      messages: [
-        {
-          user: "WORKCHAT",
-          text: "Обсуждаем создание музыки."
-        }
-      ]
+    if (albumCount) {
+      albumCount.textContent =
+        tracks.length +
+        (tracks.length === 1 ? " трек" : " треков");
     }
 
-  ];
+    if (trackStat) {
+      trackStat.textContent = tracks.length;
+    }
+  }
 
 
-const chatList = document.getElementById("chatList");
-const chatRoom = document.getElementById("chatRoom");
-const messages = document.getElementById("messages");
-const roomTitle = document.getElementById("roomTitle");
-const roomMembers = document.getElementById("roomMembers");
+  if (audioInput) {
 
-let currentChat = null;
+    audioInput.onchange = event => {
 
+      const file =
+        event.target.files[0];
 
-function saveChats() {
+      if (!file) return;
 
-  localStorage.setItem(
-    "workchat-chats",
-    JSON.stringify(chats)
-  );
+      tracks.push({
+        name: file.name,
+        url: URL.createObjectURL(file)
+      });
 
-}
+      renderTracks();
+    };
 
+  }
 
-function renderChats() {
-
-  chatList.innerHTML = "";
-
-  chats.forEach(chat => {
-
-    const item =
-      document.createElement("div");
-
-    item.className = "chat-item";
-
-    item.innerHTML = `
-      <div>
-        <strong>${escapeHTML(chat.name)}</strong>
-      </div>
-
-      <span>
-        ${chat.members}/40
-      </span>
-    `;
-
-    item.addEventListener("click", () => {
-      openChat(chat.id);
-    });
-
-    chatList.appendChild(item);
-
-  });
-
-}
+  renderTracks();
 
 
-function openChat(id) {
+  /* =========================
+     VIDEO
+  ========================= */
 
-  const chat =
-    chats.find(item => item.id === id);
+  const videoInput =
+    document.getElementById("videoInput");
 
-  if (!chat) return;
-
-  currentChat = chat;
-
-  chatList.classList.add("hidden");
-  document
-    .querySelector(".chat-create")
-    .classList.add("hidden");
-
-  chatRoom.classList.remove("hidden");
-
-  roomTitle.textContent = chat.name;
-
-  roomMembers.textContent =
-    chat.members + "/40 участников";
-
-  renderMessages();
-
-}
+  const videoPreview =
+    document.getElementById("videoPreview");
 
 
-function renderMessages() {
+  if (videoInput) {
 
-  messages.innerHTML = "";
+    videoInput.onchange = event => {
 
-  currentChat.messages.forEach(message => {
+      const file =
+        event.target.files[0];
 
-    const element =
-      document.createElement("div");
+      if (!file) return;
 
-    element.className = "message";
+      const video =
+        document.createElement("video");
 
-    element.innerHTML = `
-      <strong>${escapeHTML(message.user)}</strong>
-      <p>${escapeHTML(message.text)}</p>
-    `;
+      video.src =
+        URL.createObjectURL(file);
 
-    messages.appendChild(element);
+      video.controls = true;
+      video.playsInline = true;
 
-  });
+      videoPreview.innerHTML = "";
 
-  messages.scrollTop = messages.scrollHeight;
+      videoPreview.appendChild(video);
+    };
 
-}
-
-
-document
-  .getElementById("backChatButton")
-  .addEventListener("click", () => {
-
-    currentChat = null;
-
-    chatRoom.classList.add("hidden");
-
-    chatList.classList.remove("hidden");
-
-    document
-      .querySelector(".chat-create")
-      .classList.remove("hidden");
-
-  });
+  }
 
 
-document
-  .getElementById("createChatButton")
-  .addEventListener("click", () => {
+  /* =========================
+     CHATS
+  ========================= */
 
-    const input =
-      document.getElementById("chatNameInput");
+  const createChatButton =
+    document.getElementById("createChatButton");
 
-    const name = input.value.trim();
+  const chatList =
+    document.getElementById("chatList");
 
-    if (!name) {
+  let chats = [];
 
-      showModal(
-        "💬 Название комнаты",
-        "<p>Введите название комнаты.</p>"
-      );
+
+  function renderChats() {
+
+    if (!chatList) return;
+
+    chatList.innerHTML = "";
+
+    if (chats.length === 0) {
+
+      chatList.innerHTML = `
+        <div class="empty-state">
+          Пока нет комнат.
+        </div>
+      `;
 
       return;
     }
 
+    chats.forEach(chat => {
 
-    const newChat = {
+      const room =
+        document.createElement("div");
 
-      id: Date.now(),
+      room.className = "chat-room";
 
-      name: "💬 " + name,
+      room.innerHTML = `
+        <div class="chat-room-icon">
+          💬
+        </div>
 
-      members: 1,
+        <div class="chat-room-info">
+          <strong>${chat.name}</strong>
+          <span>${chat.members}/40 участников</span>
+        </div>
+      `;
 
-      messages: []
-
-    };
-
-
-    chats.push(newChat);
-
-    saveChats();
-
-    input.value = "";
-
-    renderChats();
-
-  });
-
-
-document
-  .getElementById("sendMessageButton")
-  .addEventListener("click", sendMessage);
-
-
-document
-  .getElementById("messageInput")
-  .addEventListener("keydown", event => {
-
-    if (event.key === "Enter") {
-      sendMessage();
-    }
-
-  });
-
-
-function sendMessage() {
-
-  if (!currentChat) return;
-
-  const input =
-    document.getElementById("messageInput");
-
-  const text = input.value.trim();
-
-  if (!text) return;
-
-  currentChat.messages.push({
-
-    user: "Ты",
-
-    text: text
-
-  });
-
-  saveChats();
-
-  input.value = "";
-
-  renderMessages();
-
-}
-
-
-renderChats();
-
-
-/* =========================
-   PROFILE
-========================= */
-
-let profile =
-  JSON.parse(localStorage.getItem("workchat-profile")) || {
-
-    name: "Creator",
-
-    bio: "Начинающий креатор WORKCHAT",
-
-    description:
-      "Здесь появится информация о пользователе."
-
-  };
-
-
-function renderProfile() {
-
-  document.getElementById("profileName").textContent =
-    profile.name;
-
-  document.getElementById("profileBio").textContent =
-    profile.bio;
-
-  document.getElementById("profileDescription").textContent =
-    profile.description;
-
-  document.getElementById("avatar").textContent =
-    profile.name.charAt(0).toUpperCase();
-
-  document.getElementById("chatStat").textContent =
-    chats.length;
-
-}
-
-
-document
-  .getElementById("editProfileButton")
-  .addEventListener("click", () => {
-
-    showModal(
-      "👤 Изменить профиль",
-      `
-        <input
-          id="nameInput"
-          type="text"
-          maxlength="30"
-          placeholder="Имя"
-          value="${escapeAttribute(profile.name)}"
-          style="
-            width:100%;
-            padding:12px;
-            margin-bottom:10px;
-            background:#0b0b10;
-            color:white;
-            border:1px solid #282833;
-            border-radius:10px;
-          "
-        >
-
-        <input
-          id="bioInput"
-          type="text"
-          maxlength="80"
-          placeholder="Краткое описание"
-          value="${escapeAttribute(profile.bio)}"
-          style="
-            width:100%;
-            padding:12px;
-            margin-bottom:10px;
-            background:#0b0b10;
-            color:white;
-            border:1px solid #282833;
-            border-radius:10px;
-          "
-        >
-
-        <textarea
-          id="descriptionInput"
-          maxlength="300"
-          placeholder="О себе"
-          style="
-            width:100%;
-            min-height:100px;
-            padding:12px;
-            background:#0b0b10;
-            color:white;
-            border:1px solid #282833;
-            border-radius:10px;
-          "
-        >${escapeHTML(profile.description)}</textarea>
-
-        <button
-          id="saveProfileButton"
-          class="primary-button"
-          style="margin-top:12px;"
-        >
-          Сохранить
-        </button>
-      `
-    );
-
-
-    document
-      .getElementById("saveProfileButton")
-      .addEventListener("click", () => {
-
-        profile.name =
-          document.getElementById("nameInput").value.trim()
-          || "Creator";
-
-        profile.bio =
-          document.getElementById("bioInput").value.trim()
-          || "Начинающий креатор WORKCHAT";
-
-        profile.description =
-          document.getElementById("descriptionInput").value.trim()
-          || "Здесь появится информация о пользователе.";
-
-
-        localStorage.setItem(
-          "workchat-profile",
-          JSON.stringify(profile)
-        );
-
-        renderProfile();
-
-        modal.classList.add("hidden");
-
-      });
-
-  });
-
-
-renderProfile();
-
-
-/* =========================
-   SECURITY HELPERS
-========================= */
-
-function escapeHTML(text) {
-
-  const div = document.createElement("div");
-
-  div.textContent = text;
-
-  return div.innerHTML;
-
-}
-
-
-function escapeAttribute(text) {
-
-  return String(text)
-    .replace(/&/g, "&amp;")
-    .replace(/"/g, "&quot;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;");
-
-}
-
-const profileName = document.getElementById("profileName");
-const profileBio = document.getElementById("profileBio");
-const avatar = document.getElementById("avatar");
-
-const savedUser =
-  localStorage.getItem("workchat-user");
-
-if (savedUser) {
-
-  profileName.textContent = savedUser;
-
-  profileBio.textContent =
-    "Новый креатор WORKCHAT";
-
-  avatar.textContent =
-    savedUser.charAt(0).toUpperCase();
-
-}
-
-const audioInput = document.getElementById("audioInput");
-const audioPlayer = document.getElementById("audioPlayer");
-const trackList = document.getElementById("trackList");
-const currentTrack = document.getElementById("currentTrack");
-const currentArtist = document.getElementById("currentArtist");
-const albumCount = document.getElementById("albumCount");
-const trackStat = document.getElementById("trackStat");
-
-let tracks = [];
-
-function renderTracks() {
-
-  trackList.innerHTML = "";
-
-  if (tracks.length === 0) {
-
-    trackList.innerHTML = `
-      <p class="empty-state">
-        Пока нет треков.
-      </p>
-    `;
-
-    albumCount.textContent = "0 треков";
-    trackStat.textContent = "0";
-
-    return;
+      chatList.appendChild(room);
+    });
   }
 
-  tracks.forEach(function(track, index) {
 
-    const item = document.createElement("div");
+  if (createChatButton) {
 
-    item.className = "track";
+    createChatButton.onclick = () => {
 
-    item.innerHTML = `
-      <div class="track-icon">🎵</div>
+      const name =
+        prompt("Название новой комнаты:");
 
-      <div class="track-info">
-        <strong>${track.name}</strong>
-        <span>WORKCHAT Creator</span>
-      </div>
+      if (!name) return;
 
-      <button class="track-play">
-        ▶
-      </button>
-    `;
-
-    item
-      .querySelector(".track-play")
-      .addEventListener("click", function() {
-
-        currentTrack.textContent = track.name;
-        currentArtist.textContent = "WORKCHAT Creator";
-
-        audioPlayer.src = track.url;
-
-        audioPlayer.play();
-
+      chats.push({
+        name: name,
+        members: 1
       });
 
-    trackList.appendChild(item);
+      renderChats();
+    };
 
-  });
+  }
 
-  albumCount.textContent =
-    tracks.length + " треков";
-
-  trackStat.textContent =
-    tracks.length;
-}
+  renderChats();
 
 
-if (audioInput) {
+  /* =========================
+     PROFILE
+  ========================= */
 
-  audioInput.addEventListener("change", function(event) {
+  function updateProfile() {
 
-    const file = event.target.files[0];
+    const profileName =
+      document.getElementById("profileName");
 
-    if (!file) return;
+    const avatar =
+      document.getElementById("avatar");
 
-    const url = URL.createObjectURL(file);
+    const user =
+      localStorage.getItem("workchatUser");
 
-    tracks.push({
-      name: file.name,
-      url: url
-    });
+    if (!user) return;
 
-    renderTracks();
+    if (profileName) {
+      profileName.textContent = user;
+    }
 
-  });
+    if (avatar) {
+      avatar.textContent =
+        user.charAt(0).toUpperCase();
+    }
+  }
 
-}
+
+  updateProfile();
 
 
-renderTracks();
+  console.log("WORKCHAT loaded successfully.");
+
+});
