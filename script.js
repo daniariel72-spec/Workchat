@@ -828,3 +828,99 @@ if (savedUser) {
     savedUser.charAt(0).toUpperCase();
 
 }
+
+const audioInput = document.getElementById("audioInput");
+const audioPlayer = document.getElementById("audioPlayer");
+const trackList = document.getElementById("trackList");
+const currentTrack = document.getElementById("currentTrack");
+const currentArtist = document.getElementById("currentArtist");
+const albumCount = document.getElementById("albumCount");
+const trackStat = document.getElementById("trackStat");
+
+let tracks = [];
+
+function renderTracks() {
+
+  trackList.innerHTML = "";
+
+  if (tracks.length === 0) {
+
+    trackList.innerHTML = `
+      <p class="empty-state">
+        Пока нет треков.
+      </p>
+    `;
+
+    albumCount.textContent = "0 треков";
+    trackStat.textContent = "0";
+
+    return;
+  }
+
+  tracks.forEach(function(track, index) {
+
+    const item = document.createElement("div");
+
+    item.className = "track";
+
+    item.innerHTML = `
+      <div class="track-icon">🎵</div>
+
+      <div class="track-info">
+        <strong>${track.name}</strong>
+        <span>WORKCHAT Creator</span>
+      </div>
+
+      <button class="track-play">
+        ▶
+      </button>
+    `;
+
+    item
+      .querySelector(".track-play")
+      .addEventListener("click", function() {
+
+        currentTrack.textContent = track.name;
+        currentArtist.textContent = "WORKCHAT Creator";
+
+        audioPlayer.src = track.url;
+
+        audioPlayer.play();
+
+      });
+
+    trackList.appendChild(item);
+
+  });
+
+  albumCount.textContent =
+    tracks.length + " треков";
+
+  trackStat.textContent =
+    tracks.length;
+}
+
+
+if (audioInput) {
+
+  audioInput.addEventListener("change", function(event) {
+
+    const file = event.target.files[0];
+
+    if (!file) return;
+
+    const url = URL.createObjectURL(file);
+
+    tracks.push({
+      name: file.name,
+      url: url
+    });
+
+    renderTracks();
+
+  });
+
+}
+
+
+renderTracks();
