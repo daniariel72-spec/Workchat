@@ -809,3 +809,22 @@ function escapeAttribute(text) {
     .replace(/>/g, "&gt;");
 
 }
+
+const profileName = document.getElementById("profileName");
+const profileBio = document.getElementById("profileBio");
+const avatar = document.getElementById("avatar");
+
+const savedUser =
+  localStorage.getItem("workchat-user");
+
+if (savedUser) {
+
+  profileName.textContent = savedUser;
+
+  profileBio.textContent =
+    "Новый креатор WORKCHAT";
+
+  avatar.textContent =
+    savedUser.charAt(0).toUpperCase();
+
+}
